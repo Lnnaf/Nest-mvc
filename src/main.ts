@@ -7,10 +7,11 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
   );
+  const PORT = process.env.PORT || 4000;
   // app.useStaticAssets(join(__dirname, '..', 'public'));
   // app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setGlobalPrefix('api/v1')
-  await app.listen(3000);
+  await app.listen(PORT);
 
   
 }
