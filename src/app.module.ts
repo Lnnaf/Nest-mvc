@@ -6,10 +6,15 @@ import { join } from 'path';
 import { UserModule } from './model/user/user.module';
 import { PostModule } from './model/post/post.module';
 import { ConfigModule } from '@nestjs/config';
+import { CouterSeqModule } from './couter-seq/couter-seq.module';
+import { UlityModule } from './ulity/ulity.module';
 
 @Module({
   imports: [
+    UlityModule,
+    CouterSeqModule,
     UserModule,
+    PostModule,
     TypeOrmModule.forRoot({
     name: 'default',
     type: 'mongodb',
@@ -19,9 +24,9 @@ import { ConfigModule } from '@nestjs/config';
     useNewUrlParser: true,
     autoLoadEntities: true,
     useUnifiedTopology:true,
+    synchronize: true,
     entities: [join(__dirname, '**/**.entity{.ts,.js}')]
   }),
-  PostModule,
   ConfigModule.forRoot()],
   controllers: [AppController],
   providers: [AppService],

@@ -5,6 +5,9 @@ export class PostEntity {
     @ObjectIdColumn()
     _id: ObjectID;
 
+    @Column({ unique: true })
+    post_id: number;
+
     @Column()
     title: string;
 

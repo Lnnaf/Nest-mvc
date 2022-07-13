@@ -1,5 +1,6 @@
 export class PostDto {
     constructor(
+        post_id?: number,
         title?: string,
         sub_title?: string,
         url_title?: string,
@@ -8,6 +9,7 @@ export class PostDto {
         last_edit_at?: Date,
         last_edit_by?: string
     ){
+        this.post_id = post_id;
         this.title = title;
         this.sub_title = sub_title;
         this.url_title = url_title;
@@ -16,6 +18,7 @@ export class PostDto {
         this.last_edit_at = last_edit_at;
         this.last_edit_by = last_edit_by;
     }
+    post_id: number;
     title: string;
     sub_title: string;
     url_title: string;
