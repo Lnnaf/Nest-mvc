@@ -23,12 +23,12 @@ export class PostController {
 
   @Get(':url_title')
   findOne(@Param('url_title') url_title: string) {
-    return this.postService.findOne(url_title);
+    return this.postService.findOneByUrlTitle(url_title);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: PostDto) {
-    return this.postService.update(+id, updatePostDto);
+  @Patch('update')
+  update(@Body() postDto: PostDto) {
+    return this.postService.update(postDto);
   }
 
   @Delete(':id')

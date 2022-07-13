@@ -21,17 +21,10 @@ export class PostService {
   async create(postDto: PostDto): Promise<any>{
     let dateTime = new Date();
     postDto.create_at = dateTime;
+    
+    const slug_title = this.slugifyTitle(postDto.title);
    
-    const slug_title = slugify(postDto.title, {
-      replacement: "-",
-      remove: undefined,
-      lower: true,
-      strict: true,
-      locale: "vi",
-      trim: true
-    });
-  
-    if(await this.findOne(slug_title)){
+    if(await this.findOneByUrlTitle(slug_title)){
       return new Message(ResponseStatus.E, `title duplicate: ${slug_title}`);  
     }else{
       postDto.url_title = slug_title;
@@ -53,17 +46,56 @@ export class PostService {
       skip: (page -1)*limit});
   }
 
-  async findOne(url_title: string): Promise<PostEntity> {
+  async findOneByUrlTitle(url_title: string): Promise<PostEntity> {
     return this.repository.findOneBy({
       where: { url_title: url_title}
     });
   }
 
-  update(id: number, updatePostDto: PostDto) {
-    return `This action updates a #${id} post`;
+  async findOneByPostId(_post_id: number): Promise<PostEntity> {
+    return this.repository.findOneBy({
+      where: { post_id: _post_id}
+    });
+  }
+
+  async update(postDto: PostDto): Promise<any> {
+    const orignal_post = await this.findOneByPostId(postDto.post_id);
+      if(orignal_post){
+        const update_post = this.converPostDtoToEntity(postDto);
+        update_post._id = orignal_post._id;
+        return this.repository.save(update_post);
+      }else{
+        return new Message(ResponseStatus.E, `post_id ${postDto.post_id} not found`);
+      } 
   }
 
   remove(id: number) {
     return `This action removes a #${id} post`;
+  }
+
+  converPostDtoToEntity(postDto: PostDto): PostEntity{
+    const postEntity = new PostEntity();
+
+    postEntity.post_id = postDto.post_id;
+    postEntity.content = postDto.content;
+    postEntity.sub_title = postDto.sub_title;
+    postEntity.title = postDto.title;
+    postEntity.url_title = this.slugifyTitle(postDto.title);
+    postEntity.create_at = postDto.create_at;
+    postEntity.last_edit_at = postDto.last_edit_at;
+    postEntity.last_edit_by = postDto.last_edit_by;
+
+    return postEntity;
+  }
+
+  slugifyTitle(title: string): string {
+    return slugify(title, {
+      replacement: "-",
+      remove: undefined,
+      lower: true,
+      strict: true,
+      locale: "vi",
+      trim: true
+    });
   }
 }
