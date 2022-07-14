@@ -23,13 +23,14 @@ export class UserController {
     }
 
     
-    @Post('/update')
-    update(@Body() user: UserDTO): Promise<Message>{
-        return this.userService.update(user);  
-    }
+    // @Post('/update')
+    // update(@Body() user: UserDTO): Promise<Message>{
+    //     return this.userService.update(user);  
+    // }
 
-    @Post('/delete')
-    delete(@Body() user: UserDTO): Promise<Message>{
-        return this.userService.delete(user);
-    }
+    // @Post('/delete')
+    // delete(@Body() user: UserDTO): Promise<Message>{
+    //     return this.userService.delete(user);
+    // }
+
 }

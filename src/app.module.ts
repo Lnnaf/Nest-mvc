@@ -3,11 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { join } from 'path';
-import { UserModule } from './model/user/user.module';
-import { PostModule } from './model/post/post.module';
+import { UserModule } from './user/user.module';
+import { PostModule } from './post/post.module';
 import { ConfigModule } from '@nestjs/config';
 import { CouterSeqModule } from './couter-seq/couter-seq.module';
 import { UlityModule } from './ulity/ulity.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { UlityModule } from './ulity/ulity.module';
     synchronize: true,
     entities: [join(__dirname, '**/**.entity{.ts,.js}')]
   }),
-  ConfigModule.forRoot()],
+  ConfigModule.forRoot(),
+  AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

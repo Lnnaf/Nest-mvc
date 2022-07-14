@@ -5,7 +5,7 @@ import { MongoRepository } from "typeorm";
 import { PostEntity } from './entities/post.entity';
 import slugify from 'slugify';
 import { CouterSeqService } from 'src/couter-seq/couter-seq.service';
-import { Message } from '../message.model';
+import { Message } from '../model/message.model';
 import { ResponseStatus } from 'src/enums/response.status.enum';
 
 const POST_SEQ_NAME ='post_seq';
@@ -69,8 +69,13 @@ export class PostService {
       } 
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async remove(post_id: number) {
+    const orignal_post = await this.findOneByPostId(post_id);
+    if(orignal_post){
+      return this.repository.remove(orignal_post);
+    }else{
+      return new Message(ResponseStatus.E, `post_id ${post_id} not found`);
+    } 
   }
 
   converPostDtoToEntity(postDto: PostDto): PostEntity{

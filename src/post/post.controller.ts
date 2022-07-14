@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, DefaultValuePipe, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, DefaultValuePipe, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostDto } from './dto/post.dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { PostEntity } from './entities/post.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
 
 @Controller('tin-tuc')
 export class PostController {
@@ -12,7 +14,7 @@ export class PostController {
   create(@Body() postDto: PostDto) {
     return this.postService.create(postDto);
   }
-
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll( 
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
@@ -31,8 +33,8 @@ export class PostController {
     return this.postService.update(postDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
+  @Delete('delete/:post_id')
+  remove(@Param('post_id') post_id: string) {
+    return this.postService.remove(parseInt(post_id));
   }
 }
