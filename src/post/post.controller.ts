@@ -5,7 +5,7 @@ import { PostEntity } from './entities/post.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 
-@Controller('tin-tuc')
+@Controller('news')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
