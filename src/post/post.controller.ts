@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, DefaultValuePipe, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostDto } from './dto/post.dto';
-import { Pagination } from 'nestjs-typeorm-paginate';
 import { PostEntity } from './entities/post.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
