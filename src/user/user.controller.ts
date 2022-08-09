@@ -2,8 +2,8 @@ import { Body, Controller, Get, Post, Res, HttpStatus, Req } from "@nestjs/commo
 import { UserDTO } from "./user.dto";
 import { User } from "./user.entity";
 import { UserService } from "./user.service";
-import { Message } from "src/model/message.model";
-import { ResponseStatus } from "src/enums/response.status.enum";
+import { Message } from "../model/message.model";
+import { ResponseStatus } from "../enums/response.status.enum";
 import { Request } from 'express';
 
 @Controller('user')

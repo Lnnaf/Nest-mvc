@@ -3,8 +3,9 @@ import { PostService } from './post.service';
 import { PostController } from './post.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostEntity } from './entities/post.entity';
-import { CouterSeqModule } from 'src/couter-seq/couter-seq.module';
-import { AuthModule } from 'src/auth/auth.module';
+import { CouterSeqModule } from '../couter-seq/couter-seq.module';
+import { AuthModule } from '../auth/auth.module';
+import { UlityService } from '../ulity/ulity.service';
 
 
 @Module({
@@ -13,7 +14,7 @@ import { AuthModule } from 'src/auth/auth.module';
     CouterSeqModule, 
     TypeOrmModule.forFeature([PostEntity])],
   controllers: [PostController],
-  providers: [PostService],
+  providers: [PostService, UlityService],
   exports: [PostService]
 })
 export class PostModule {}

@@ -2,10 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, DefaultValueP
 import { PostService } from './post.service';
 import { PostDto } from './dto/post.dto';
 import { PostEntity } from './entities/post.entity';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 
-@Controller('news')
+@Controller('tin-tuc')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 

@@ -1,4 +1,4 @@
-import { ResponseStatus } from "src/enums/response.status.enum";
+import { ResponseStatus } from "../enums/response.status.enum";
 
 export class Message {
     constructor(status?: ResponseStatus, message?: string){

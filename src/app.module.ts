@@ -9,7 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { CouterSeqModule } from './couter-seq/couter-seq.module';
 import { UlityModule } from './ulity/ulity.module';
 import { AuthModule } from './auth/auth.module';
-
+import { ServeStaticModule } from '@nestjs/serve-static/dist/serve-static.module';
 @Module({
   imports: [
     UlityModule,

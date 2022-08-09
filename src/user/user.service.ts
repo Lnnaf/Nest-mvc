@@ -3,9 +3,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./user.entity";
 import { MongoRepository } from "typeorm";
 import { UserDTO } from "./user.dto";
-import { UlityService } from "src/ulity/ulity.service";
-import { ResponseStatus } from "src/enums/response.status.enum";
-import { Message } from "src/model/message.model";
+import { UlityService } from '../ulity/ulity.service';
+import { ResponseStatus } from "../enums/response.status.enum";
+import { Message } from "../model/message.model";
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

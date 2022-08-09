@@ -10,7 +10,9 @@ async function bootstrap() {
     AppModule,
   );
   const PORT = process.env.PORT || 4000;
-  // app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.useStaticAssets(join(__dirname, '..', 'public'), {
+    prefix: '/public/',
+  });
   // app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setGlobalPrefix('api/v1')
   const config = new DocumentBuilder()

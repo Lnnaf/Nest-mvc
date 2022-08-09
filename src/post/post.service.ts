@@ -6,7 +6,9 @@ import { PostEntity } from './entities/post.entity';
 import slugify from 'slugify';
 import { CouterSeqService } from 'src/couter-seq/couter-seq.service';
 import { Message } from '../model/message.model';
-import { ResponseStatus } from 'src/enums/response.status.enum';
+import { ResponseStatus } from '../enums/response.status.enum';
+import { writeFile } from 'fs';
+import { UlityService } from '../ulity/ulity.service';
 
 const POST_SEQ_NAME ='post_seq';
 
@@ -16,19 +18,21 @@ export class PostService {
     @InjectRepository(PostEntity)
     private readonly repository: MongoRepository<PostEntity>,
     private readonly couterSeqService: CouterSeqService,
+    private ulityService: UlityService
   ){}
  
   async create(postDto: PostDto): Promise<any>{
     let dateTime = new Date();
     postDto.create_at = dateTime;
-    
+ 
     const slug_title = this.slugifyTitle(postDto.title);
-   
+  
     if(await this.findOneByUrlTitle(slug_title)){
       return new Message(ResponseStatus.E, `title duplicate: ${slug_title}`);  
     }else{
       postDto.url_title = slug_title;
     }
+    postDto.content = await (this.saveImage(postDto.content, postDto.url_title));
 
     const current_post_seq_num = (await this.couterSeqService.findOne(POST_SEQ_NAME));
     if(!current_post_seq_num){
@@ -102,5 +106,15 @@ export class PostService {
       locale: "vi",
       trim: true
     });
+  }
+
+  async saveImage(rawContent: string, post_name: string): Promise<string>{
+      var base64Imgs = this.ulityService.getBase64Data(rawContent);
+      var img_paths = [];
+      for (var i = 0; i < base64Imgs.length;i++) {
+        img_paths.push(this.ulityService.saveImage(base64Imgs[i], i, post_name));
+      }
+      return this.ulityService.replaceBase64(rawContent, img_paths);
+
   }
 }
