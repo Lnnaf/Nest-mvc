@@ -36,8 +36,11 @@ export class AppController {
 
   @Get('/login')
   @Render('layouts/login')
-  login(@Request() req): { message: string } {
-    return { message: req.flash('loginError') };
+  login(@Request() req) {
+      return { 
+        message: req.flash('loginError') ,
+        isLoginFailed: req.flash('isLoginFailed')
+    };
   }
 
   @UseGuards(AuthenticatedGuard)
@@ -46,8 +49,6 @@ export class AppController {
   admin(@Request() req) {
     var user_info = req.session.passport.user;
     var isAdmin = user_info.role === Role.ADMIN
-    console.log(Role.ADMIN.valueOf);
-    
     var roles = Object.values(Role);
     return {
       roles,
