@@ -4,17 +4,37 @@ import { AppModule } from './app.module';
 import { join } from 'path';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as bodyParser from 'body-parser';
+import * as hbs from 'hbs';
+import { NotFoundExceptionFilter } from './http-exception.filter';
+import flash = require('connect-flash');
+import * as session from 'express-session';
+import * as passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
   );
-  const PORT = process.env.PORT || 4000;
-  app.useStaticAssets(join(__dirname, '..', 'public'), {
-    prefix: '/public/',
-  });
-  // app.setBaseViewsDir(join(__dirname, '..', 'views'));
-  app.setGlobalPrefix('api/v1')
+  const PORT = process.env.PORT;
+ 
+  app.useStaticAssets(join(__dirname, '..', 'public'),{prefix:'/public'});
+  app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  app.setViewEngine('hbs');
+  hbs.registerPartials(join(__dirname, '..', 'views/partials'));
+
+  app.use(
+    session({
+      secret: 'nest cats',
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(flash());
+  
+  // app.setViewEngine('hbs');
+  app.useGlobalFilters(new NotFoundExceptionFilter());
+
   const config = new DocumentBuilder()
   .setTitle('API documentation')
   .setDescription('This is documentation for API')
@@ -30,6 +50,7 @@ async function bootstrap() {
   app.enableCors();
   await app.listen(PORT);
 
+  
   
 }
 bootstrap();

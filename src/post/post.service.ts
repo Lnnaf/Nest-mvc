@@ -4,7 +4,7 @@ import { PostDto } from './dto/post.dto';
 import { MongoRepository } from "typeorm";
 import { PostEntity } from './entities/post.entity';
 import slugify from 'slugify';
-import { CouterSeqService } from 'src/couter-seq/couter-seq.service';
+import { CouterSeqService } from '../couter-seq/couter-seq.service';
 import { Message } from '../model/message.model';
 import { ResponseStatus } from '../enums/response.status.enum';
 import { writeFile } from 'fs';
