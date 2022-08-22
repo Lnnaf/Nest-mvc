@@ -110,6 +110,9 @@ export class PostService {
 
   async saveImage(rawContent: string, post_name: string): Promise<string>{
       var base64Imgs = this.ulityService.getBase64Data(rawContent);
+      if(!base64Imgs){
+        return null;
+      }
       var img_paths = [];
       for (var i = 0; i < base64Imgs.length;i++) {
         img_paths.push(this.ulityService.saveImage(base64Imgs[i], i, post_name));

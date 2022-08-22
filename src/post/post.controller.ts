@@ -5,7 +5,7 @@ import { PostEntity } from './entities/post.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 
-@Controller('news')
+@Controller('api/news')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
@@ -13,7 +13,7 @@ export class PostController {
   create(@Body() postDto: PostDto) {
     return this.postService.create(postDto);
   }
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   findAll( 
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,

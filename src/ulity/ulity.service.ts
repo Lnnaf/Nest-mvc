@@ -20,7 +20,9 @@ export class UlityService {
     getBase64Data(rawContent: string): string[]{
         let result = [];
         let rawImage64 =  rawContent.match(new RegExp('data:\([^"]+\)*','g'));
-        console.log(rawImage64.length);
+        if(!rawImage64){
+            return null
+        }
         for (let i = 0; i < rawImage64.length; i++){
             result.push(rawImage64[i].split(';base64,').pop())
         };

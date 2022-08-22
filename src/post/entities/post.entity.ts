@@ -1,3 +1,4 @@
+import { PostStatus } from 'src/enums/post.status.enum';
 import {Column, Entity, ObjectIdColumn, ObjectID} from 'typeorm';
 
 @Entity()
@@ -28,4 +29,7 @@ export class PostEntity {
 
     @Column()
     last_edit_by: string;
+
+    @Column()
+    post_status: PostStatus;
 }

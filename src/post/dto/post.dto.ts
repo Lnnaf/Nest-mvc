@@ -1,3 +1,5 @@
+import { PostStatus } from "src/enums/post.status.enum";
+
 export class PostDto {
     constructor(
         post_id?: number,
@@ -7,7 +9,8 @@ export class PostDto {
         content?: string,
         create_at?: Date,
         last_edit_at?: Date,
-        last_edit_by?: string
+        last_edit_by?: string,
+        postStatus?:PostStatus
     ){
         this.post_id = post_id;
         this.title = title;
@@ -17,6 +20,7 @@ export class PostDto {
         this.create_at = create_at;
         this.last_edit_at = last_edit_at;
         this.last_edit_by = last_edit_by;
+        this.post_status = postStatus;
     }
     post_id: number;
     title: string;
@@ -26,4 +30,5 @@ export class PostDto {
     create_at: Date;
     last_edit_at: Date;
     last_edit_by: string;
+    post_status: PostStatus
 }

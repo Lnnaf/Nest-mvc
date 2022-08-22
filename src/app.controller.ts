@@ -43,20 +43,6 @@ export class AppController {
     };
   }
 
-  @UseGuards(AuthenticatedGuard)
-  @Get('/admin')
-  @Render('layouts/admin')
-  admin(@Request() req) {
-    var user_info = req.session.passport.user;
-    var isAdmin = user_info.role === Role.ADMIN
-    var roles = Object.values(Role);
-    return {
-      roles,
-      user_info,
-      isAdmin,
-      message: 'hehehe',
-    };
-  }
 
   @Get('/logout')
   logout(@Request() req, @Res() res: Response) {
