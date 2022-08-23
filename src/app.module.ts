@@ -10,7 +10,7 @@ import { CouterSeqModule } from './couter-seq/couter-seq.module';
 import { UlityModule } from './ulity/ulity.module';
 import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static/dist/serve-static.module';
-import { AdminController } from './admin/admin.controller';
+import { AdminPostController } from './admin/admin.post.controller';
 @Module({
   imports: [
     UlityModule,
@@ -31,7 +31,7 @@ import { AdminController } from './admin/admin.controller';
   }),
   ConfigModule.forRoot(),
   AuthModule],
-  controllers: [AppController, AdminController],
+  controllers: [AppController, AdminPostController],
   providers: [AppService],
 })
 export class AppModule {}

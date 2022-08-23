@@ -10,6 +10,8 @@ import flash = require('connect-flash');
 import * as session from 'express-session';
 import * as passport from 'passport';
 import * as hbsRegister from './hbs.register'
+import express = require('express');
+import path = require('path');
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
@@ -20,6 +22,7 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('hbs');
   hbs.registerPartials(join(__dirname, '..', 'views/partials'));
+  app.use('/public', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
   require("./hbs.register").register(hbs);
   app.use(
     session({

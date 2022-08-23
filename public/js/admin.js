@@ -7,6 +7,7 @@ window.addEventListener('DOMContentLoaded', event => {
     // Activate feather
     feather.replace();
 
+
     // Enable tooltips globally
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {

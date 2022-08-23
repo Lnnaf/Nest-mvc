@@ -40,7 +40,7 @@ export class UlityService {
     }
 
     saveImage(imgBase64: string, index: number, name: string): string{
-        let path = 'public/images/'+name+'_'+index+'.png'
+        let path = 'public/uploads/images/'+name+'_'+index+'.png'
         writeFile(path, imgBase64, {encoding: 'base64'}, function(err) {
             if (err) {
                 console.log(err);
@@ -48,7 +48,7 @@ export class UlityService {
                 console.log(`File ${name}_${index}.png created`); 
             } 
           });
-          return process.env.SERV_STATIC_URL+ ':' + process.env.PORT + '/'+ path;
+          return '../'+path;
     }
 
 }

@@ -52,7 +52,8 @@
         "rimraf": "^3.0.2",
         "run-script-webpack-plugin": "^0.1.1",
         "rxjs": "^7.2.0",
-        "slugify": "^1.6.5"
+        "slugify": "^1.6.5",
+        "tinymce": "^6.1.2"
     },
     "devDependencies": {
         "@nestjs/cli": "^9.0.0",

@@ -1,5 +1,6 @@
 import * as moment from 'moment';
 import { PostStatus } from './enums/post.status.enum';
+import { ResponseStatus } from './enums/response.status.enum';
 import { Role } from './enums/role.enum';
 
 var register = function (Handlebars) {
@@ -23,7 +24,9 @@ var register = function (Handlebars) {
         }, 
         isAdmin: function (value) {
             return value == Role.ADMIN;
-        },
+        },isPostSuccess:function (value) {
+            return value == ResponseStatus.S;
+        }
     };
 
     if (Handlebars && typeof Handlebars.registerHelper === "function") {

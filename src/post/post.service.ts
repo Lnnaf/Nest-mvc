@@ -9,6 +9,7 @@ import { Message } from '../model/message.model';
 import { ResponseStatus } from '../enums/response.status.enum';
 import { writeFile } from 'fs';
 import { UlityService } from '../ulity/ulity.service';
+import { PostStatus } from 'src/enums/post.status.enum';
 
 const POST_SEQ_NAME ='post_seq';
 
@@ -33,21 +34,34 @@ export class PostService {
       postDto.url_title = slug_title;
     }
     postDto.content = await (this.saveImage(postDto.content, postDto.url_title));
-
+    if(!postDto.content){
+      return ResponseStatus.E;
+    }
+    postDto.post_status = PostStatus.WAITING_APPROVE;
     const current_post_seq_num = (await this.couterSeqService.findOne(POST_SEQ_NAME));
     if(!current_post_seq_num){
       postDto.post_id = (await this.couterSeqService.create(0, POST_SEQ_NAME)).seq_num;
     }else{
       postDto.post_id = parseInt((await this.couterSeqService.increament(POST_SEQ_NAME)).seq_num);
     }
-    return this.repository.save(postDto);  
+    var result = await this.repository.save(postDto);
+    if( result ){
+      return ResponseStatus.S;
+    }
+    return ResponseStatus.E; 
   }
 
-  async findAll(page:number, limit:number): Promise<PostEntity[]>{
+  async findAllPaging(page:number, limit:number): Promise<PostEntity[]>{
     return this.repository.find({
       order: { create_at: "DESC" }, 
       take: limit, 
       skip: (page -1)*limit});
+  }
+
+  async findAll(): Promise<PostEntity[]>{
+    return this.repository.find({
+      order: { create_at: "DESC" }, 
+    });
   }
 
   async findOneByUrlTitle(url_title: string): Promise<PostEntity> {
@@ -115,9 +129,15 @@ export class PostService {
       }
       var img_paths = [];
       for (var i = 0; i < base64Imgs.length;i++) {
-        img_paths.push(this.ulityService.saveImage(base64Imgs[i], i, post_name));
+        var path = await this.ulityService.saveImage(base64Imgs[i], i, post_name);
+        if(path){
+          img_paths.push(path);
+        }else{
+          return null;
+        }
+       
       }
-      return this.ulityService.replaceBase64(rawContent, img_paths);
+      return await this.ulityService.replaceBase64(rawContent, img_paths);
 
   }
 }
