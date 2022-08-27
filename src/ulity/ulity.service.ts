@@ -48,7 +48,7 @@ export class UlityService {
                 console.log(`File ${name}_${index}.png created`); 
             } 
           });
-          return '../'+path;
+          return '/'+path;
     }
 
 }

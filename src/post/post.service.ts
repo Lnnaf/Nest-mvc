@@ -83,7 +83,7 @@ export class PostService {
         update_post._id = orignal_post._id;
         return this.repository.save(update_post);
       }else{
-        return new Message(ResponseStatus.E, `post_id ${postDto.post_id} not found`);
+        return null;
       } 
   }
 
@@ -125,7 +125,7 @@ export class PostService {
   async saveImage(rawContent: string, post_name: string): Promise<string>{
       var base64Imgs = this.ulityService.getBase64Data(rawContent);
       if(!base64Imgs){
-        return null;
+        return rawContent;
       }
       var img_paths = [];
       for (var i = 0; i < base64Imgs.length;i++) {
@@ -133,7 +133,7 @@ export class PostService {
         if(path){
           img_paths.push(path);
         }else{
-          return null;
+          return rawContent;
         }
        
       }

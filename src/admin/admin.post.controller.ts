@@ -6,6 +6,8 @@ import {
   Request,
   UseGuards,
   Res,
+  Param,
+  NotFoundException,
 } from '@nestjs/common';
 //   import { AuthExceptionFilter } from './auth-exceptions.filter';
 //   import { AuthenticatedGuard } from './auth/authenticated.guard';
@@ -50,14 +52,33 @@ export class AdminPostController {
     };
   }
 
+  @Get('edit-post/:post_id')
+  @Render('layouts/admin')
+  async edit(@Request() req, @Param('post_id') post_id: string) {
+    // var user_info = req.session.passport.user;
+    // var isAdmin = user_info.role === Role.ADMIN
+    var result = await this.postService.findOneByPostId(parseInt(post_id));
+    if(!result){
+      throw new NotFoundException();
+    }
+    return {
+      whichPartial: function () {
+        return 'adminPostCreate';
+      },
+        post_id:post_id,
+        content: result.content ,
+        title: result.title,
+        sub_title: result.sub_title,
+    };
+  }
+
+
   @Get('/news')
   @Render('layouts/admin')
   async createNew(@Request() req) {
     // var user_info = req.session.passport.user;
     // var isAdmin = user_info.role === Role.ADMIN
     const news = await this.postService.findAll();
-    console.log(news.length);
-    
     return {
       whichPartial: function () {
         return 'adminPostList';
