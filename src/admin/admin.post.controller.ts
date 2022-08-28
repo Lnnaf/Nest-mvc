@@ -44,6 +44,7 @@ export class AdminPostController {
       whichPartial: function () {
         return 'adminPostCreate';
       },
+        isCreateMode: true,
         message: req.flash('message') ,
         content: req.flash('content') ,
         title: req.flash('title') ,
@@ -65,10 +66,13 @@ export class AdminPostController {
       whichPartial: function () {
         return 'adminPostCreate';
       },
-        post_id:post_id,
+        isCreateMode: false,
+        message: req.flash('message') ,
+        post_id: post_id,
         content: result.content ,
         title: result.title,
         sub_title: result.sub_title,
+        status_create: req.flash('status_create')
     };
   }
 

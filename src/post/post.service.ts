@@ -7,9 +7,9 @@ import slugify from 'slugify';
 import { CouterSeqService } from '../couter-seq/couter-seq.service';
 import { Message } from '../model/message.model';
 import { ResponseStatus } from '../enums/response.status.enum';
-import { writeFile } from 'fs';
 import { UlityService } from '../ulity/ulity.service';
 import { PostStatus } from 'src/enums/post.status.enum';
+import * as moment from 'moment';
 
 const POST_SEQ_NAME ='post_seq';
 
@@ -22,20 +22,21 @@ export class PostService {
     private ulityService: UlityService
   ){}
  
-  async create(postDto: PostDto): Promise<any>{
-    let dateTime = new Date();
-    postDto.create_at = dateTime;
- 
+  async create(postDto: PostDto): Promise<Message>{
+    const dateLocate = new Date(moment(new Date()).toLocaleString())
+    postDto.create_at = dateLocate;
     const slug_title = this.slugifyTitle(postDto.title);
-  
-    if(await this.findOneByUrlTitle(slug_title)){
-      return new Message(ResponseStatus.E, `title duplicate: ${slug_title}`);  
+    
+    const isDuplicateTitle = await this.findOneByUrlTitle(slug_title)
+   
+    if(isDuplicateTitle){
+      return new Message(ResponseStatus.ERROR, `Tiêu đề đã tồn tại: ${postDto.title}`);  
     }else{
       postDto.url_title = slug_title;
     }
     postDto.content = await (this.saveImage(postDto.content, postDto.url_title));
     if(!postDto.content){
-      return ResponseStatus.E;
+      return new Message(ResponseStatus.ERROR, `Không thể tạo bài viết, lỗi lưu ảnh`);;
     }
     postDto.post_status = PostStatus.WAITING_APPROVE;
     const current_post_seq_num = (await this.couterSeqService.findOne(POST_SEQ_NAME));
@@ -46,9 +47,9 @@ export class PostService {
     }
     var result = await this.repository.save(postDto);
     if( result ){
-      return ResponseStatus.S;
+      return new Message(ResponseStatus.SUCCESS, `Tạo bài viết thành công`);
     }
-    return ResponseStatus.E; 
+    return new Message(ResponseStatus.ERROR, `Tạo bài viết Thất bại`);
   }
 
   async findAllPaging(page:number, limit:number): Promise<PostEntity[]>{
@@ -76,14 +77,21 @@ export class PostService {
     });
   }
 
-  async update(postDto: PostDto): Promise<any> {
-    const orignal_post = await this.findOneByPostId(postDto.post_id);
+  async update(postDto: PostDto): Promise<Message> {
+    postDto.post_id = parseInt(postDto.post_id.toString());
+    const orignal_post = await this.findOneByPostId(postDto.post_id)
+    
       if(orignal_post){
         const update_post = this.converPostDtoToEntity(postDto);
         update_post._id = orignal_post._id;
-        return this.repository.save(update_post);
+        var result = await this.repository.save(update_post);
+        if(result){
+          return new Message(ResponseStatus.SUCCESS, `Chỉnh sửa thành công`);
+        }else{
+          return new Message(ResponseStatus.ERROR, `Chỉnh sửa thất bại`);
+        }
       }else{
-        return null;
+        return new Message(ResponseStatus.ERROR, `không tìm thấy bài viết id: ${postDto.post_id}`);
       } 
   }
 
@@ -92,7 +100,7 @@ export class PostService {
     if(orignal_post){
       return this.repository.remove(orignal_post);
     }else{
-      return new Message(ResponseStatus.E, `post_id ${post_id} not found`);
+      return new Message(ResponseStatus.ERROR, `post_id ${post_id} not found`);
     } 
   }
 

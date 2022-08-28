@@ -7,7 +7,7 @@ var register = function (Handlebars) {
     var helpers = {
         formatDate: function (dateString) {
             return new Handlebars.SafeString(
-                moment(dateString).format("DD-MM-YYYY")
+                moment(dateString).format("DD-MM-YYYY HH:mm:ss")
             );
         },
         published: function (value) {
@@ -25,7 +25,9 @@ var register = function (Handlebars) {
         isAdmin: function (value) {
             return value == Role.ADMIN;
         },isPostSuccess:function (value) {
-            return value == ResponseStatus.S;
+            return value == ResponseStatus.SUCCESS;
+        },isNot:function (value:boolean) {
+            return !value;
         }
     };
 

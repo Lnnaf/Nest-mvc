@@ -1,4 +1,4 @@
 export const enum ResponseStatus {
-    S = 'S',
-    E = 'E'
+    SUCCESS = 'S',
+    ERROR = 'E'
 }

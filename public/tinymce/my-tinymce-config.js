@@ -2,7 +2,7 @@ tinymce.init({
     selector: 'textarea#postEditor',
     plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
     toolbar_mode: 'floating',
-    content_css: '../public/css/admin.css',
+    content_css: '/public/css/admin.css',
     images_file_types: 'jpg,svg,webp',
     file_picker_types: 'file image media',
     block_unsupported_drop: false,

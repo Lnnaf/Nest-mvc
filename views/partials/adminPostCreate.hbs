@@ -1,14 +1,19 @@
 <iframe name="votar" style="display:none;"></iframe>
-<form action="/api/news/create"  method="post">
-
+<form action="{{#if isCreateMode}}/api/news/create{{else}}/api/news/update{{/if}}"  method="post">
+    <input  type="number" style="display: none;" name="post_id" value="{{post_id}}"/>
     <header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
         <div class="container-fluid px-4">
             <div class="page-header-content">
                 <div class="row align-items-center justify-content-between pt-3">
                     <div class="col-auto mb-3">
                         <h1 class="page-header-title">
-                            <div class="page-header-icon"><i data-feather="file-plus"></i></div>
-                            Create Post
+                            {{#if isCreateMode}}
+                                <div class="page-header-icon"><i data-feather="file-plus"></i></div>
+                                Tạo mới
+                            {{else}}
+                                <div class="page-header-icon"><i data-feather="edit"></i></div>
+                                Chỉnh sửa bài viết ID: {{post_id}}
+                            {{/if}}
                         </h1>
                     </div>
                     {{#if message includeZero=true}}
@@ -17,7 +22,7 @@
                     </div>
                     {{/if}}
                     <div class="col-12 col-xl-auto mb-3">
-                        <a class="btn btn-sm btn-light text-primary" href="blog-management-posts-list.html">
+                        <a class="btn btn-sm btn-light text-primary" href="/admin/news">
                             <i class="me-1" data-feather="arrow-left"></i>
                             Back to All Posts
                         </a>
@@ -29,7 +34,7 @@
     <!-- Main page content-->
     <div class="container-fluid px-4">
         <div class="row gx-4">
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <div class="card mb-4">
                     <div class="card-header">Post Title</div>
                     <div class="card-body"><input name="title" required class="form-control" id="postTitleInput"
@@ -42,32 +47,37 @@
                             title="The post preview text shows below the post title, and is the post summary on blog pages."></i>
                     </div>
                     <div class="card-body"><textarea class="lh-base form-control" name="sub_title" type="text"
-                            placeholder="Enter your post preview text..." rows="4"> {{sub_title}} </textarea></div>
+                            placeholder="Enter your post preview text..." rows="4">{{sub_title}}</textarea></div>
                 </div>
-                <div class="card card-header-actions mb-4 mb-lg-0">
+                <div class="card card-header-actions mb-4 mb-lg-0 widt">
                     <div class="card-header">
                         Post Content
                         <i class="text-muted" data-feather="info" data-bs-toggle="tooltip" data-bs-placement="left"
                             title="Markdown is supported within the post content editor."></i>
                     </div>
                     <div class="card-body">
-                        <textarea name="content" id="postEditor">{{content}}</textarea>
+                        <textarea style="height:70rem;" name="content" id="postEditor">{{content}}</textarea>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
+        </div>
+        <div class="row gx-4 mt-3">
+            <div class="col-lg-12">
                 <div class="card card-header-actions">
                     <div class="card-header">
                         Publish
                         <i class="text-muted" data-feather="info" data-bs-toggle="tooltip" data-bs-placement="left"
                             title="After submitting, your post will be published once it is approved by a moderator."></i>
                     </div>
-                    <div class="card-body">
-                        <div class="d-grid mb-3"><button class="fw-500 btn btn-primary-soft text-primary">Save as
-                                Draft</button></div>
-                        <div class="d-grid"><button type="submit" class="fw-500 btn btn-primary">Submit for
-                                Approval</button></div>
+                    {{#if isCreateMode}}
+                    <div class="card-body col-lg-4 mx-lg-auto">
+                        <div class="d-grid"><button type="submit" class="fw-500 btn btn-primary">Tạo bài viết</button></div>
                     </div>
+                    {{else}}
+                     <div class="card-body col-lg-4 mx-lg-auto">
+                        <div class="d-grid"><button type="submit" class="fw-500 btn btn-primary">Chỉnh sửa</button></div>
+                    </div>
+                    {{/if}}
                 </div>
             </div>
         </div>

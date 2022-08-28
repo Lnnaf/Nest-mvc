@@ -17,16 +17,14 @@ export class PostController {
   @Post('create')
   async create(@Body() postDto: PostDto, @Res() res: Response, @Req() req: IRequestFlash) {
     const backup_obj = postDto;
-    if(await this.postService.create(postDto) == ResponseStatus.S){
-      req.flash('message','success')
-      req.flash('status_create',ResponseStatus.S);
-    }else{
-      req.flash('message','failed')
-      req.flash('status_create',ResponseStatus.E);
-      req.flash('content',backup_obj.content);
-      req.flash('title',backup_obj.title);
-      req.flash('sub_title',backup_obj.sub_title);
-    }
+    var result = await this.postService.create(postDto)
+    
+    req.flash('isCreateMode', true)
+    req.flash('message', result.message)
+    req.flash('status_create',result.status);
+    req.flash('content', result.status == ResponseStatus.SUCCESS ? null : backup_obj.content);
+    req.flash('title', result.status == ResponseStatus.SUCCESS ? null : backup_obj.title);
+    req.flash('sub_title', result.status == ResponseStatus.SUCCESS ? null : backup_obj.sub_title);
     
     res.redirect('back');
     
@@ -54,13 +52,14 @@ export class PostController {
     return this.postService.findOneByUrlTitle(url_title);
   }
 
-  @Patch('update')
+  @Post('update')
   update(@Body() postDto: PostDto) {
     return this.postService.update(postDto);
   }
 
-  @Delete('delete/:post_id')
-  remove(@Param('post_id') post_id: string) {
-    return this.postService.remove(parseInt(post_id));
+  @Get('delete/:post_id')
+  remove(@Param('post_id') post_id: string, @Res() res: Response) {
+    this.postService.remove(parseInt(post_id));
+    res.redirect('back');
   }
 }
